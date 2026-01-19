@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Investment - GODAEON</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="src/style.css">
+</head>
+<body class="bg-black text-white is-loading">
+    <div id="dynamic-bg"></div>
+    <div id="pixel-overlay"></div>
+
+    <div class="menu-toggle-container">
+        <div class="floating-menu-logo" id="floatingLogo">
+            <i class="fas fa-cube text-red-600"></i> 
+            <span>GODAEON</span>
+        </div>
+        <div class="menu-toggle-btn" id="menuToggle">
+            <div class="menu-btn-content" id="menuBtnContent">
+                <span>PRESS 'X' FOR MENU</span>
+            </div>
+        </div>
+    </div>
+    <div class="menu-overlay" id="menuOverlay">
+        <div class="wheel-svg-container" id="wheelSvgContainer">
+            <div class="wheel-center" id="wheelCenter"><div class="w-2 h-2 bg-white rounded-full shadow-[0_0_10px_white]"></div></div>
+            <svg width="600" height="600" viewBox="0 0 600 600" id="wheelSvg"></svg>
+            <div class="wheel-content" id="wheelContent"></div>
+        </div>
+    </div>
+
+    <div class="container mx-auto px-6 py-24 pb-40">
+        
+        <div class="flex flex-col md:flex-row justify-between items-end mb-16 border-b border-gray-800 pb-8">
+            <div>
+                <h1 class="text-5xl font-bold mb-4">STRATEGIC <span class="text-red-600">INVESTMENT</span></h1>
+                <p class="text-gray-400 text-lg">Scaling responsibly while maintaining creative control.</p>
+            </div>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-12 items-start">
+            
+            <div>
+                <h2 class="text-3xl font-bold mb-8">WE ARE <span class="text-red-600">OPEN TO</span></h2>
+                <div class="space-y-6">
+                    <div class="flex items-start gap-4 p-4 bg-gray-900 rounded border border-gray-800">
+                        <div class="w-12 h-12 bg-red-900/20 rounded-full flex items-center justify-center shrink-0">
+                            <i class="fas fa-handshake text-red-500"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-xl font-bold mb-1">Strategic Partners</h4>
+                            <p class="text-gray-400">Collaboration with entities that bring technical or market expertise.</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start gap-4 p-4 bg-gray-900 rounded border border-gray-800">
+                        <div class="w-12 h-12 bg-red-900/20 rounded-full flex items-center justify-center shrink-0">
+                            <i class="fas fa-seedling text-red-500"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-xl font-bold mb-1">Early-Stage Investors</h4>
+                            <p class="text-gray-400">Funding partners who understand the long-term value of original IP.</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start gap-4 p-4 bg-gray-900 rounded border border-gray-800">
+                        <div class="w-12 h-12 bg-red-900/20 rounded-full flex items-center justify-center shrink-0">
+                            <i class="fas fa-bullhorn text-red-500"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-xl font-bold mb-1">Publishing Discussions</h4>
+                            <p class="text-gray-400">Partnerships to bring Red Line Nation to a global audience.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-gradient-to-br from-gray-900 to-black p-8 rounded border border-gray-800 text-center">
+                <h3 class="text-2xl font-bold mb-4">INVESTMENT GOALS</h3>
+                <p class="text-gray-400 mb-8 leading-relaxed">
+                    Our primary objective is to build original, long-term game franchises. We aim to scale our operations responsibly while ensuring we maintain creative control and 100% IP ownership.
+                </p>
+                
+                <div class="bg-black p-6 rounded border border-red-600/30">
+                    <i class="fas fa-file-invoice-dollar text-4xl text-white mb-4"></i>
+                    <h4 class="text-lg font-bold mb-2">REQUEST DECK</h4>
+                    <p class="text-sm text-gray-500 mb-6">For detailed investment decks and financial projections.</p>
+                    <a href="contact.html" class="inline-block w-full bg-red-600 text-black font-bold py-3 uppercase tracking-widest hover:bg-white hover:text-red-600 transition-colors">
+                        Contact Us
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script type="module" src="src/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Godaeon Squad - RED LINE NATION</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="src/style.css">
+
+    <style>
+        /* --- TACTICAL GRID LAYOUT --- */
+        .squad-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 50px;
+            padding: 40px 20px;
+            justify-items: center;
+            perspective: 2000px; /* Deep perspective for 3D realism */
+        }
+
+        /* --- CARD CONTAINER --- */
+        .cyber-card {
+            position: relative;
+            height: 500px;
+            width: 100%;
+            max-width: 340px;
+            cursor: pointer;
+            border-radius: 12px;
+            background: transparent;
+            /* No overflow hidden here, or 3D edges get cut off */
+        }
+
+        /* --- THE MOVING PART (THE SLATE) --- */
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            /* SMOOTH FLIP PHYSICS: No instant snapping */
+            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        /* THE FLIP STATE */
+        .card-inner.is-flipped {
+            transform: rotateY(180deg);
+        }
+
+        /* --- FACES (FRONT & BACK) --- */
+        .card-front, .card-back {
+            position: absolute;
+            inset: 0;
+            backface-visibility: hidden; /* Hides the back when facing away */
+            border-radius: 12px;
+            border: 1px solid #333;
+            background: #000;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        /* --- FRONT FACE --- */
+        .card-front {
+            z-index: 2;
+            transform: rotateY(0deg);
+            transition: border-color 0.3s ease;
+        }
+
+        /* Red Glow on Hover (Only when front is visible) */
+        .cyber-card:hover .card-front {
+            border-color: #ff0000;
+            box-shadow: 0 0 25px rgba(255, 0, 0, 0.3);
+        }
+
+        /* --- BACK FACE --- */
+        .card-back {
+            transform: rotateY(180deg); /* Pre-rotated to face backwards */
+            background: 
+                linear-gradient(to bottom, #0a0a0a, #000),
+                repeating-linear-gradient(45deg, rgba(255,0,0,0.03) 0px, rgba(255,0,0,0.03) 1px, transparent 1px, transparent 10px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 30px;
+            border-color: #ff0000; /* Back always has red border */
+        }
+
+        /* --- CONTENT STYLING --- */
+        .card-media {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: grayscale(100%) contrast(1.2);
+            transition: filter 0.5s;
+        }
+        
+        .cyber-card:hover .card-media {
+            filter: grayscale(0%) contrast(1);
+        }
+
+        .char-info {
+            position: absolute;
+            bottom: 0; left: 0; width: 100%;
+            padding: 20px;
+            background: linear-gradient(to top, #000 0%, transparent 100%);
+            border-top: 1px solid rgba(255, 0, 0, 0.3);
+            z-index: 20;
+        }
+
+        .real-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 3px solid #ff0000;
+            object-fit: cover;
+            margin-bottom: 20px;
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.4);
+        }
+    </style>
+</head>
+<body class="bg-black text-white overflow-x-hidden">
+
+    <div class="cyber-grid-bg"></div>
+    <div id="pixel-overlay"></div>
+
+    <div class="menu-toggle-container">
+        <div class="floating-menu-logo" id="floatingLogo">
+            <i class="fas fa-cube text-red-600"></i> 
+            <span>GODAEON</span>
+        </div>
+        <div class="menu-toggle-btn" id="menuToggle">
+            <div class="menu-btn-content" id="menuBtnContent">
+                <span>PRESS 'X' FOR MENU</span>
+            </div>
+        </div>
+    </div>
+    
+    <div class="menu-overlay" id="menuOverlay">
+        <div class="wheel-svg-container" id="wheelSvgContainer">
+            <div class="wheel-center" id="wheelCenter">
+                <div class="w-2 h-2 bg-white rounded-full shadow-[0_0_10px_white]"></div>
+            </div>
+            <svg width="600" height="600" viewBox="0 0 600 600" id="wheelSvg"></svg>
+            <div class="wheel-content" id="wheelContent"></div>
+        </div>
+    </div>
+
+    <div class="container mx-auto px-6 py-24 pb-40">
+        
+        <div class="text-center mb-20">
+            <h1 class="text-6xl font-bold mb-4 tracking-tighter">THE <span class="text-red-600">SQUAD</span></h1>
+            <p class="text-gray-400 text-xl tracking-widest uppercase">Click cards to decrypt identity</p>
+        </div>
+
+        <div class="squad-grid">
+
+            <div class="cyber-card">
+                <div class="card-inner">
+                    <div class="card-front">
+                        <video class="card-media" autoplay loop muted playsinline>
+                            <source src="media/radar.mp4" type="video/mp4">
+                        </video>
+                        <div class="char-info">
+                            <h2 class="text-2xl font-bold uppercase tracking-widest">CIPHER</h2>
+                            <span class="text-red-600 text-xs font-mono">[ SYSTEM_ARCHITECT ]</span>
+                        </div>
+                    </div>
+                    <div class="card-back">
+                        <img src="media/sorav.jpeg" class="real-avatar" alt="Sorav">
+                        <h3 class="text-2xl font-bold mb-1">Sorav</h3>
+                        <span class="text-gray-400 text-sm mb-6 uppercase tracking-widest">Founder & Developer</span>
+                        <p class="text-gray-400 text-sm leading-relaxed mb-6">
+                            "Building, breaking, and innovating. Curiosity, commitment, and caffeine."
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="cyber-card">
+                <div class="card-inner">
+                    <div class="card-front">
+                        <img class="card-media" src="media/hero1.jpeg" alt="Ronin Cover">
+                        <div class="char-info">
+                            <h2 class="text-2xl font-bold uppercase tracking-widest">RONIN</h2>
+                            <span class="text-red-600 text-xs font-mono">[ UI_SPECIALIST ]</span>
+                        </div>
+                    </div>
+                    <div class="card-back">
+                        <img src="media/siddharth.jpeg" class="real-avatar" alt="Siddharth">
+                        <h3 class="text-2xl font-bold mb-1">Siddharth Dwivedi</h3>
+                        <span class="text-gray-400 text-sm mb-6 uppercase tracking-widest">Frontend Lead</span>
+                        <p class="text-gray-400 text-sm leading-relaxed mb-6">
+                            "Crafting pixel-perfect interfaces that blur the line between reality and the digital realm."
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="cyber-card">
+                <div class="card-inner">
+                    <div class="card-front">
+                        <img class="card-media" src="media/hero2.jpeg" alt="Spectre Cover">
+                        <div class="char-info">
+                            <h2 class="text-2xl font-bold uppercase tracking-widest">SPECTRE</h2>
+                            <span class="text-red-600 text-xs font-mono">[ DATA_OPS ]</span>
+                        </div>
+                    </div>
+                    <div class="card-back">
+                        <img src="media/swaraj.jpeg" class="real-avatar" alt="Swaraj">
+                        <h3 class="text-2xl font-bold mb-1">Swaraj Lakhe</h3>
+                        <span class="text-gray-400 text-sm mb-6 uppercase tracking-widest">Web Developer</span>
+                        <p class="text-gray-400 text-sm leading-relaxed mb-6">
+                            "Ensuring the infrastructure holds. Scalability, security, and zero downtime."
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script type="module" src="src/main.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const cards = document.querySelectorAll('.cyber-card');
+
+            cards.forEach(card => {
+                const inner = card.querySelector('.card-inner');
+                let isFlipped = false;
+
+                // 1. CLICK TO FLIP
+                card.addEventListener('click', () => {
+                    isFlipped = !isFlipped;
+                    inner.classList.toggle('is-flipped');
+
+                    // CRITICAL FIX: If flipped, remove tilt immediately to prevent glitches
+                    if (isFlipped) {
+                        // Reset rotation to align perfectly with the flip axis
+                        card.style.transform = 'rotateX(0) rotateY(0)';
+                    }
+                });
+
+                // 2. MOUSE MOVE (TILT EFFECT)
+                card.addEventListener('mousemove', (e) => {
+                    // STOP tilt if the card is flipped. This prevents the glitch.
+                    if (isFlipped) return; 
+
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+
+                    const xPct = (x / rect.width - 0.5) * 2;
+                    const yPct = (y / rect.height - 0.5) * 2;
+
+                    // Subtle tilt (10 degrees max)
+                    const xRotation = yPct * -10; 
+                    const yRotation = xPct * 10; 
+
+                    requestAnimationFrame(() => {
+                        // Only apply if NOT flipped
+                        if (!isFlipped) {
+                            card.style.transform = `rotateX(${xRotation}deg) rotateY(${yRotation}deg) scale(1.02)`;
+                        }
+                    });
+                });
+
+                // 3. MOUSE LEAVE (RESET)
+                card.addEventListener('mouseleave', () => {
+                    if (isFlipped) return; // Don't reset if we are looking at the back
+                    
+                    card.style.transform = `rotateX(0deg) rotateY(0deg) scale(1)`;
+                });
+            });
+        });
+    </script>
+</body>
+</html>
