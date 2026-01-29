@@ -277,7 +277,7 @@ function initCommandWheel() {
             gsap.to(menuOverlay, { opacity: 0, pointerEvents: "none", duration: 0.3 });
             gsap.to(wheelSvgContainer, { rotation: 90, scale: 0.5, opacity: 0, duration: 0.4 });
             gsap.to(wheelCenter, { x: 0, y: 0, duration: 0.3 });
-            menuBtnContent.innerHTML = "<span>PRESS 'X' FOR MENU</span>";
+            menuBtnContent.innerHTML = "<span>PRESS 'X'</span>";
             gsap.to(floatingLogo, { opacity: 1, y: 0 }); 
         }
     }
