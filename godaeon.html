@@ -10,117 +10,181 @@
     <link rel="stylesheet" href="src/style.css">
 
     <style>
-        /* --- TACTICAL GRID LAYOUT --- */
-        .squad-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 50px;
-            padding: 40px 20px;
-            justify-items: center;
-            perspective: 2000px; /* Deep perspective for 3D realism */
+        /* --- CAROUSEL CONTAINER --- */
+        .carousel-view {
+            width: 100%;
+            height: 80vh; /* Occupy most of the screen */
+            display: flex;
+            align-items: center;
+            overflow: hidden; /* Hide scrollbars */
+            position: relative;
+            /* Fade edges for smooth entry/exit */
+            mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+            -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
         }
 
-        /* --- CARD CONTAINER --- */
+        /* --- THE MOVING TRACK --- */
+        .carousel-track {
+            display: flex;
+            gap: 40px; /* Space between cards */
+            width: max-content;
+            /* The Infinite Scroll Animation */
+            animation: scroll-left 20s linear infinite;
+            padding: 0 40px;
+            perspective: 2000px; /* Enable 3D for children */
+        }
+
+        /* PAUSE ON HOVER so user can interact */
+        .carousel-track:hover {
+            animation-play-state: paused;
+        }
+
+        /* --- ANIMATION KEYFRAMES --- */
+        @keyframes scroll-left {
+            0% { transform: translateX(0); }
+            /* Move exactly half the width (since we duplicated the cards) */
+            100% { transform: translateX(-50%); } 
+        }
+
+        /* --- CARD STYLING (Bitkraft Style) --- */
         .cyber-card {
             position: relative;
-            height: 500px;
-            width: 100%;
-            max-width: 340px;
+            width: 300px; /* Fixed width for consistency */
+            height: 500px; /* Tall portrait aspect */
+            flex-shrink: 0; /* Prevent squishing */
             cursor: pointer;
-            border-radius: 12px;
             background: transparent;
-            /* No overflow hidden here, or 3D edges get cut off */
         }
 
-        /* --- THE MOVING PART (THE SLATE) --- */
         .card-inner {
             position: relative;
             width: 100%;
             height: 100%;
             transform-style: preserve-3d;
-            /* SMOOTH FLIP PHYSICS: No instant snapping */
-            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: transform 0.8s cubic-bezier(0.15, 0.9, 0.34, 1);
         }
 
-        /* THE FLIP STATE */
         .card-inner.is-flipped {
             transform: rotateY(180deg);
         }
 
-        /* --- FACES (FRONT & BACK) --- */
+        /* --- FACES --- */
         .card-front, .card-back {
             position: absolute;
             inset: 0;
-            backface-visibility: hidden; /* Hides the back when facing away */
-            border-radius: 12px;
+            backface-visibility: hidden;
+            /* Tech Cut Corners */
+            clip-path: polygon(
+                20px 0, 100% 0, 
+                100% calc(100% - 20px), calc(100% - 20px) 100%, 
+                0 100%, 0 20px
+            );
             border: 1px solid #333;
-            background: #000;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            background: #050505;
         }
 
-        /* --- FRONT FACE --- */
+        /* --- FRONT --- */
         .card-front {
             z-index: 2;
-            transform: rotateY(0deg);
-            transition: border-color 0.3s ease;
         }
-
-        /* Red Glow on Hover (Only when front is visible) */
-        .cyber-card:hover .card-front {
-            border-color: #ff0000;
-            box-shadow: 0 0 25px rgba(255, 0, 0, 0.3);
-        }
-
-        /* --- BACK FACE --- */
-        .card-back {
-            transform: rotateY(180deg); /* Pre-rotated to face backwards */
-            background: 
-                linear-gradient(to bottom, #0a0a0a, #000),
-                repeating-linear-gradient(45deg, rgba(255,0,0,0.03) 0px, rgba(255,0,0,0.03) 1px, transparent 1px, transparent 10px);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            padding: 30px;
-            border-color: #ff0000; /* Back always has red border */
-        }
-
-        /* --- CONTENT STYLING --- */
+        
         .card-media {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            filter: grayscale(100%) contrast(1.2);
-            transition: filter 0.5s;
-        }
-        
-        .cyber-card:hover .card-media {
-            filter: grayscale(0%) contrast(1);
+            filter: grayscale(100%) contrast(1.1) brightness(0.9);
+            transition: filter 0.4s ease, transform 0.4s ease;
         }
 
-        .char-info {
+        .cyber-card:hover .card-media {
+            filter: grayscale(0%) contrast(1) brightness(1);
+            transform: scale(1.05);
+        }
+
+        .front-overlay {
             position: absolute;
             bottom: 0; left: 0; width: 100%;
             padding: 20px;
-            background: linear-gradient(to top, #000 0%, transparent 100%);
-            border-top: 1px solid rgba(255, 0, 0, 0.3);
-            z-index: 20;
+            background: linear-gradient(to top, #000 10%, transparent 100%);
+            pointer-events: none;
         }
 
-        .real-avatar {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            border: 3px solid #ff0000;
+        /* --- BACK --- */
+        .card-back {
+            transform: rotateY(180deg);
+            background: #0a0a0a;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .real-bg-img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
             object-fit: cover;
-            margin-bottom: 20px;
-            box-shadow: 0 0 20px rgba(255, 0, 0, 0.4);
+            opacity: 0.3; 
+            filter: grayscale(100%);
+        }
+
+        .back-content {
+            position: relative;
+            z-index: 20;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 25px;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.7) 0%, transparent 40%, #000 90%);
+        }
+
+        /* --- TECH DECORATIONS --- */
+        .tech-frame {
+            position: absolute;
+            inset: 5px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            clip-path: polygon(
+                15px 0, 100% 0, 
+                100% calc(100% - 15px), calc(100% - 15px) 100%, 
+                0 100%, 0 15px
+            );
+            pointer-events: none;
+        }
+
+        .linkedin-btn {
+            position: absolute;
+            bottom: 25px;
+            right: 25px;
+            color: white;
+            font-size: 1.4rem;
+            z-index: 30;
+            transition: color 0.3s;
+        }
+        .linkedin-btn:hover { color: #0077b5; }
+
+        /* HEADER TEXTS */
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            font-family: 'Courier New', monospace;
+            font-size: 0.7rem;
+            color: #666;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 10px;
+        }
+        .tag-highlight { color: #ff0000; font-weight: bold; }
+        
+        .bio-text {
+            font-size: 0.8rem;
+            color: #ccc;
+            margin-top: 10px;
+            border-left: 2px solid #ff0000;
+            padding-left: 10px;
+            line-height: 1.5;
         }
     </style>
 </head>
-<body class="bg-black text-white overflow-x-hidden">
+<body class="bg-black text-white overflow-hidden is-loading">
 
     <div class="cyber-grid-bg"></div>
     <div id="pixel-overlay"></div>
@@ -147,33 +211,36 @@
         </div>
     </div>
 
-    <div class="container mx-auto px-6 py-24 pb-40">
-        
-        <div class="text-center mb-20">
-            <h1 class="text-6xl font-bold mb-4 tracking-tighter">THE <span class="text-red-600">SQUAD</span></h1>
-            <p class="text-gray-400 text-xl tracking-widest uppercase">Click cards to decrypt identity</p>
-        </div>
+    <div class="container mx-auto px-6 pt-16 text-center">
+        <h1 class="text-5xl font-bold mb-2 tracking-tighter">THE <span class="text-red-600">SQUAD</span></h1>
+    </div>
 
-        <div class="squad-grid">
-
+    <div class="carousel-view">
+        <div class="carousel-track">
+            
             <div class="cyber-card">
                 <div class="card-inner">
                     <div class="card-front">
                         <video class="card-media" autoplay loop muted playsinline>
                             <source src="media/radar.mp4" type="video/mp4">
                         </video>
-                        <div class="char-info">
-                            <h2 class="text-2xl font-bold uppercase tracking-widest">CIPHER</h2>
-                            <span class="text-red-600 text-xs font-mono">[ SYSTEM_ARCHITECT ]</span>
+                        <div class="front-overlay">
+                            <h2 class="text-3xl font-bold font-teko uppercase leading-none">CIPHER</h2>
+                            <p class="text-xs text-red-500 font-mono tracking-widest">SYSTEM ARCHITECT</p>
                         </div>
+                        <div class="tech-frame"></div>
                     </div>
                     <div class="card-back">
-                        <img src="media/sorav.jpeg" class="real-avatar" alt="Sorav">
-                        <h3 class="text-2xl font-bold mb-1">Sorav</h3>
-                        <span class="text-gray-400 text-sm mb-6 uppercase tracking-widest">Founder & Developer</span>
-                        <p class="text-gray-400 text-sm leading-relaxed mb-6">
-                            "Building, breaking, and innovating. Curiosity, commitment, and caffeine."
-                        </p>
+                        <img src="media/sorav.jpeg" class="real-bg-img" alt="Sorav">
+                        <div class="back-content">
+                            <div class="card-header"><span>ID: 001</span><span class="tag-highlight">FOUNDER</span></div>
+                            <div>
+                                <h3 class="text-3xl font-bold uppercase font-teko">SORAV</h3>
+                                <p class="text-xs text-gray-400 uppercase tracking-wider">FULL STACK DEV</p>
+                                <p class="bio-text">"Building, breaking, and innovating. Driven by curiosity."</p>
+                            </div>
+                        </div>
+                        <a href="#" class="linkedin-btn"><i class="fab fa-linkedin"></i></a>
                     </div>
                 </div>
             </div>
@@ -181,19 +248,24 @@
             <div class="cyber-card">
                 <div class="card-inner">
                     <div class="card-front">
-                        <img class="card-media" src="media/hero1.jpeg" alt="Ronin Cover">
-                        <div class="char-info">
-                            <h2 class="text-2xl font-bold uppercase tracking-widest">RONIN</h2>
-                            <span class="text-red-600 text-xs font-mono">[ UI_SPECIALIST ]</span>
+                        <img class="card-media" src="media/hero1.jpeg" alt="Ronin">
+                        <div class="front-overlay">
+                            <h2 class="text-3xl font-bold font-teko uppercase leading-none">RONIN</h2>
+                            <p class="text-xs text-red-500 font-mono tracking-widest">UI SPECIALIST</p>
                         </div>
+                        <div class="tech-frame"></div>
                     </div>
                     <div class="card-back">
-                        <img src="media/siddharth.jpeg" class="real-avatar" alt="Siddharth">
-                        <h3 class="text-2xl font-bold mb-1">Siddharth Dwivedi</h3>
-                        <span class="text-gray-400 text-sm mb-6 uppercase tracking-widest">Frontend Lead</span>
-                        <p class="text-gray-400 text-sm leading-relaxed mb-6">
-                            "Crafting pixel-perfect interfaces that blur the line between reality and the digital realm."
-                        </p>
+                        <img src="media/siddharth.jpeg" class="real-bg-img" alt="Siddharth">
+                        <div class="back-content">
+                            <div class="card-header"><span>ID: 002</span><span class="tag-highlight">LEAD FE</span></div>
+                            <div>
+                                <h3 class="text-3xl font-bold uppercase font-teko">SIDDHARTH</h3>
+                                <p class="text-xs text-gray-400 uppercase tracking-wider">REACT / GSAP</p>
+                                <p class="bio-text">"Crafting interfaces that blur reality."</p>
+                            </div>
+                        </div>
+                        <a href="#" class="linkedin-btn"><i class="fab fa-linkedin"></i></a>
                     </div>
                 </div>
             </div>
@@ -201,22 +273,189 @@
             <div class="cyber-card">
                 <div class="card-inner">
                     <div class="card-front">
-                        <img class="card-media" src="media/hero2.jpeg" alt="Spectre Cover">
-                        <div class="char-info">
-                            <h2 class="text-2xl font-bold uppercase tracking-widest">SPECTRE</h2>
-                            <span class="text-red-600 text-xs font-mono">[ DATA_OPS ]</span>
+                        <img class="card-media" src="media/hero2.jpeg" alt="Spectre">
+                        <div class="front-overlay">
+                            <h2 class="text-3xl font-bold font-teko uppercase leading-none">SPECTRE</h2>
+                            <p class="text-xs text-red-500 font-mono tracking-widest">DATA OPS</p>
                         </div>
+                        <div class="tech-frame"></div>
                     </div>
                     <div class="card-back">
-                        <img src="media/swaraj.jpeg" class="real-avatar" alt="Swaraj">
-                        <h3 class="text-2xl font-bold mb-1">Swaraj Lakhe</h3>
-                        <span class="text-gray-400 text-sm mb-6 uppercase tracking-widest">Web Developer</span>
-                        <p class="text-gray-400 text-sm leading-relaxed mb-6">
-                            "Ensuring the infrastructure holds. Scalability, security, and zero downtime."
-                        </p>
+                        <img src="media/swaraj.jpeg" class="real-bg-img" alt="Swaraj">
+                        <div class="back-content">
+                            <div class="card-header"><span>ID: 003</span><span class="tag-highlight">BACKEND</span></div>
+                            <div>
+                                <h3 class="text-3xl font-bold uppercase font-teko">SWARAJ</h3>
+                                <p class="text-xs text-gray-400 uppercase tracking-wider">SECURITY OPS</p>
+                                <p class="bio-text">"Ensuring scalability and zero downtime."</p>
+                            </div>
+                        </div>
+                        <a href="#" class="linkedin-btn"><i class="fab fa-linkedin"></i></a>
                     </div>
                 </div>
             </div>
+
+            <div class="cyber-card">
+                <div class="card-inner">
+                    <div class="card-front">
+                        <img class="card-media" src="https://images.unsplash.com/photo-1531297461136-82lw8fca9198?q=80&w=1000&auto=format&fit=crop" alt="Unknown">
+                        <div class="front-overlay">
+                            <h2 class="text-3xl font-bold font-teko uppercase leading-none">PHANTOM</h2>
+                            <p class="text-xs text-red-500 font-mono tracking-widest">RECON</p>
+                        </div>
+                        <div class="tech-frame"></div>
+                    </div>
+                    <div class="card-back">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=1000&auto=format&fit=crop" class="real-bg-img">
+                        <div class="back-content">
+                            <div class="card-header"><span>ID: 004</span><span class="tag-highlight">CLASSIFIED</span></div>
+                            <div>
+                                <h3 class="text-3xl font-bold uppercase font-teko">UNKNOWN</h3>
+                                <p class="text-xs text-gray-400 uppercase tracking-wider">INTELLIGENCE</p>
+                                <p class="bio-text">"Data redacted. Level 5 clearance."</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="cyber-card">
+                <div class="card-inner">
+                    <div class="card-front">
+                        <img class="card-media" src="https://images.unsplash.com/photo-1614728263952-84ea256f9679?q=80&w=1000&auto=format&fit=crop" alt="Unknown">
+                        <div class="front-overlay">
+                            <h2 class="text-3xl font-bold font-teko uppercase leading-none">VANGUARD</h2>
+                            <p class="text-xs text-red-500 font-mono tracking-widest">ASSAULT</p>
+                        </div>
+                        <div class="tech-frame"></div>
+                    </div>
+                    <div class="card-back">
+                        <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=1000&auto=format&fit=crop" class="real-bg-img">
+                        <div class="back-content">
+                            <div class="card-header"><span>ID: 005</span><span class="tag-highlight">OPEN</span></div>
+                            <div>
+                                <h3 class="text-3xl font-bold uppercase font-teko">RECRUITING</h3>
+                                <p class="text-xs text-gray-400 uppercase tracking-wider">GAME DESIGN</p>
+                                <p class="bio-text">"Position open for application."</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="cyber-card">
+                <div class="card-inner">
+                    <div class="card-front">
+                        <img class="card-media" src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=1000&auto=format&fit=crop" alt="Unknown">
+                        <div class="front-overlay">
+                            <h2 class="text-3xl font-bold font-teko uppercase leading-none">GHOST</h2>
+                            <p class="text-xs text-red-500 font-mono tracking-widest">STEALTH</p>
+                        </div>
+                        <div class="tech-frame"></div>
+                    </div>
+                    <div class="card-back">
+                        <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=1000&auto=format&fit=crop" class="real-bg-img">
+                        <div class="back-content">
+                            <div class="card-header"><span>ID: 006</span><span class="tag-highlight">OPEN</span></div>
+                            <div>
+                                <h3 class="text-3xl font-bold uppercase font-teko">RECRUITING</h3>
+                                <p class="text-xs text-gray-400 uppercase tracking-wider">AUDIO ENG</p>
+                                <p class="bio-text">"Seeking audio specialist."</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="cyber-card">
+                <div class="card-inner">
+                    <div class="card-front">
+                        <img class="card-media" src="https://images.unsplash.com/photo-1626544827763-d516dce335ca?q=80&w=1000&auto=format&fit=crop" alt="Unknown">
+                        <div class="front-overlay">
+                            <h2 class="text-3xl font-bold font-teko uppercase leading-none">WRAITH</h2>
+                            <p class="text-xs text-red-500 font-mono tracking-widest">SUPPORT</p>
+                        </div>
+                        <div class="tech-frame"></div>
+                    </div>
+                    <div class="card-back">
+                        <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?q=80&w=1000&auto=format&fit=crop" class="real-bg-img">
+                        <div class="back-content">
+                            <div class="card-header"><span>ID: 007</span><span class="tag-highlight">PENDING</span></div>
+                            <div>
+                                <h3 class="text-3xl font-bold uppercase font-teko">RESERVED</h3>
+                                <p class="text-xs text-gray-400 uppercase tracking-wider">MARKETING</p>
+                                <p class="bio-text">"Clearance pending."</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="cyber-card">
+                <div class="card-inner">
+                    <div class="card-front">
+                        <img class="card-media" src="https://images.unsplash.com/photo-1555680202-c86f0e12f086?q=80&w=1000&auto=format&fit=crop" alt="Unknown">
+                        <div class="front-overlay">
+                            <h2 class="text-3xl font-bold font-teko uppercase leading-none">ONYX</h2>
+                            <p class="text-xs text-red-500 font-mono tracking-widest">COMMAND</p>
+                        </div>
+                        <div class="tech-frame"></div>
+                    </div>
+                    <div class="card-back">
+                        <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=1000&auto=format&fit=crop" class="real-bg-img">
+                        <div class="back-content">
+                            <div class="card-header"><span>ID: 008</span><span class="tag-highlight">CLASSIFIED</span></div>
+                            <div>
+                                <h3 class="text-3xl font-bold uppercase font-teko">UNKNOWN</h3>
+                                <p class="text-xs text-gray-400 uppercase tracking-wider">STRATEGY</p>
+                                <p class="bio-text">"Identity protected."</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="cyber-card">
+                <div class="card-inner">
+                    <div class="card-front">
+                        <video class="card-media" autoplay loop muted playsinline><source src="media/radar.mp4" type="video/mp4"></video>
+                        <div class="front-overlay"><h2 class="text-3xl font-bold font-teko uppercase leading-none">CIPHER</h2><p class="text-xs text-red-500 font-mono tracking-widest">SYSTEM ARCHITECT</p></div>
+                        <div class="tech-frame"></div>
+                    </div>
+                    <div class="card-back">
+                        <img src="media/sorav.jpeg" class="real-bg-img"><div class="back-content"><div class="card-header"><span>ID: 001</span><span class="tag-highlight">FOUNDER</span></div><div><h3 class="text-3xl font-bold uppercase font-teko">SORAV</h3><p class="text-xs text-gray-400 uppercase tracking-wider">FULL STACK DEV</p></div></div>
+                    </div>
+                </div>
+            </div>
+             <div class="cyber-card">
+                <div class="card-inner">
+                    <div class="card-front">
+                        <img class="card-media" src="media/hero1.jpeg" alt="Ronin">
+                        <div class="front-overlay"><h2 class="text-3xl font-bold font-teko uppercase leading-none">RONIN</h2><p class="text-xs text-red-500 font-mono tracking-widest">UI SPECIALIST</p></div>
+                        <div class="tech-frame"></div>
+                    </div>
+                    <div class="card-back">
+                        <img src="media/siddharth.jpeg" class="real-bg-img"><div class="back-content"><div class="card-header"><span>ID: 002</span><span class="tag-highlight">LEAD FE</span></div><div><h3 class="text-3xl font-bold uppercase font-teko">SIDDHARTH</h3></div></div>
+                    </div>
+                </div>
+            </div>
+             <div class="cyber-card">
+                <div class="card-inner">
+                    <div class="card-front">
+                        <img class="card-media" src="media/hero2.jpeg" alt="Spectre">
+                        <div class="front-overlay"><h2 class="text-3xl font-bold font-teko uppercase leading-none">SPECTRE</h2><p class="text-xs text-red-500 font-mono tracking-widest">DATA OPS</p></div>
+                        <div class="tech-frame"></div>
+                    </div>
+                    <div class="card-back">
+                        <img src="media/swaraj.jpeg" class="real-bg-img"><div class="back-content"><div class="card-header"><span>ID: 003</span><span class="tag-highlight">BACKEND</span></div><div><h3 class="text-3xl font-bold uppercase font-teko">SWARAJ</h3></div></div>
+                    </div>
+                </div>
+            </div>
+            <div class="cyber-card"><div class="card-inner"><div class="card-front"><img class="card-media" src="https://images.unsplash.com/photo-1531297461136-82lw8fca9198?q=80&w=1000&auto=format&fit=crop"><div class="front-overlay"><h2 class="text-3xl font-bold font-teko uppercase">PHANTOM</h2></div><div class="tech-frame"></div></div><div class="card-back"><img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=1000&auto=format&fit=crop" class="real-bg-img"><div class="back-content"><div class="card-header"><span>ID: 004</span></div><div><h3 class="text-3xl font-bold uppercase font-teko">UNKNOWN</h3></div></div></div></div></div>
+             <div class="cyber-card"><div class="card-inner"><div class="card-front"><img class="card-media" src="https://images.unsplash.com/photo-1614728263952-84ea256f9679?q=80&w=1000&auto=format&fit=crop"><div class="front-overlay"><h2 class="text-3xl font-bold font-teko uppercase">VANGUARD</h2></div><div class="tech-frame"></div></div><div class="card-back"><img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=1000&auto=format&fit=crop" class="real-bg-img"><div class="back-content"><div class="card-header"><span>ID: 005</span></div><div><h3 class="text-3xl font-bold uppercase font-teko">RECRUITING</h3></div></div></div></div></div>
+             <div class="cyber-card"><div class="card-inner"><div class="card-front"><img class="card-media" src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=1000&auto=format&fit=crop"><div class="front-overlay"><h2 class="text-3xl font-bold font-teko uppercase">GHOST</h2></div><div class="tech-frame"></div></div><div class="card-back"><img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=1000&auto=format&fit=crop" class="real-bg-img"><div class="back-content"><div class="card-header"><span>ID: 006</span></div><div><h3 class="text-3xl font-bold uppercase font-teko">RECRUITING</h3></div></div></div></div></div>
+             <div class="cyber-card"><div class="card-inner"><div class="card-front"><img class="card-media" src="https://images.unsplash.com/photo-1626544827763-d516dce335ca?q=80&w=1000&auto=format&fit=crop"><div class="front-overlay"><h2 class="text-3xl font-bold font-teko uppercase">WRAITH</h2></div><div class="tech-frame"></div></div><div class="card-back"><img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?q=80&w=1000&auto=format&fit=crop" class="real-bg-img"><div class="back-content"><div class="card-header"><span>ID: 007</span></div><div><h3 class="text-3xl font-bold uppercase font-teko">RESERVED</h3></div></div></div></div></div>
+             <div class="cyber-card"><div class="card-inner"><div class="card-front"><img class="card-media" src="https://images.unsplash.com/photo-1555680202-c86f0e12f086?q=80&w=1000&auto=format&fit=crop"><div class="front-overlay"><h2 class="text-3xl font-bold font-teko uppercase">ONYX</h2></div><div class="tech-frame"></div></div><div class="card-back"><img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=1000&auto=format&fit=crop" class="real-bg-img"><div class="back-content"><div class="card-header"><span>ID: 008</span></div><div><h3 class="text-3xl font-bold uppercase font-teko">UNKNOWN</h3></div></div></div></div></div>
 
         </div>
     </div>
@@ -235,43 +474,28 @@
                 card.addEventListener('click', () => {
                     isFlipped = !isFlipped;
                     inner.classList.toggle('is-flipped');
-
-                    // CRITICAL FIX: If flipped, remove tilt immediately to prevent glitches
-                    if (isFlipped) {
-                        // Reset rotation to align perfectly with the flip axis
-                        card.style.transform = 'rotateX(0) rotateY(0)';
-                    }
+                    if(isFlipped) card.style.transform = 'none';
                 });
 
-                // 2. MOUSE MOVE (TILT EFFECT)
+                // 2. MOUSE MOVE (Tilt)
                 card.addEventListener('mousemove', (e) => {
-                    // STOP tilt if the card is flipped. This prevents the glitch.
-                    if (isFlipped) return; 
-
+                    if (isFlipped) return; // Disable tilt if flipped
                     const rect = card.getBoundingClientRect();
                     const x = e.clientX - rect.left;
                     const y = e.clientY - rect.top;
-
                     const xPct = (x / rect.width - 0.5) * 2;
                     const yPct = (y / rect.height - 0.5) * 2;
-
-                    // Subtle tilt (10 degrees max)
-                    const xRotation = yPct * -10; 
-                    const yRotation = xPct * 10; 
+                    const xRotation = yPct * -8; // Stronger tilt
+                    const yRotation = xPct * 8; 
 
                     requestAnimationFrame(() => {
-                        // Only apply if NOT flipped
-                        if (!isFlipped) {
-                            card.style.transform = `rotateX(${xRotation}deg) rotateY(${yRotation}deg) scale(1.02)`;
-                        }
+                        if (!isFlipped) card.style.transform = `rotateX(${xRotation}deg) rotateY(${yRotation}deg)`;
                     });
                 });
 
-                // 3. MOUSE LEAVE (RESET)
+                // 3. RESET
                 card.addEventListener('mouseleave', () => {
-                    if (isFlipped) return; // Don't reset if we are looking at the back
-                    
-                    card.style.transform = `rotateX(0deg) rotateY(0deg) scale(1)`;
+                    if (!isFlipped) card.style.transform = `rotateX(0deg) rotateY(0deg)`;
                 });
             });
         });

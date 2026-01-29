@@ -256,29 +256,29 @@ function initCommandWheel() {
 
     function toggleMenu() {
         isMenuOpen = !isMenuOpen;
+        
+        // --- MOBILE FIX: Detect screen size ---
+        const isMobile = window.innerWidth < 768;
+        // On mobile, scale to 0.55 (approx 330px). On Desktop, scale to 1 (600px).
+        const targetScale = isMobile ? 0.55 : 1;
+
         if (isMenuOpen) {
             gsap.to(menuOverlay, { opacity: 1, pointerEvents: "all", duration: 0.4 });
-            gsap.fromTo(wheelSvgContainer, { rotation: -180, scale: 0.5, opacity: 0 }, { rotation: 0, scale: 1, opacity: 1, duration: 1, ease: "elastic.out(1, 0.7)" });
+            
+            // ANIMATE TO targetScale INSTEAD OF 1
+            gsap.fromTo(wheelSvgContainer, 
+                { rotation: -180, scale: 0.5, opacity: 0 }, 
+                { rotation: 0, scale: targetScale, opacity: 1, duration: 1, ease: "elastic.out(1, 0.7)" }
+            );
+            
             menuBtnContent.innerHTML = '<i class="fas fa-times menu-close-icon" aria-hidden="true"></i>'; 
             gsap.to(floatingLogo, { opacity: 0, y: 20 }); 
-
-            if (menuRadarVideo) {
-                const playPromise = menuRadarVideo.play();
-                if (playPromise && typeof playPromise.catch === 'function') {
-                    playPromise.catch(() => {});
-                }
-            }
         } else {
             gsap.to(menuOverlay, { opacity: 0, pointerEvents: "none", duration: 0.3 });
             gsap.to(wheelSvgContainer, { rotation: 90, scale: 0.5, opacity: 0, duration: 0.4 });
             gsap.to(wheelCenter, { x: 0, y: 0, duration: 0.3 });
             menuBtnContent.innerHTML = "<span>PRESS 'X' FOR MENU</span>";
             gsap.to(floatingLogo, { opacity: 1, y: 0 }); 
-
-            if (menuRadarVideo) {
-                menuRadarVideo.pause();
-                menuRadarVideo.currentTime = 0;
-            }
         }
     }
     menuToggle.addEventListener('click', toggleMenu);
