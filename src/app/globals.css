@@ -81,7 +81,7 @@ body.loaded {
   z-index: -1;
   overflow: hidden;
   background-color: #000;
-  background-image: url('/media/hero1.jpeg');
+
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
