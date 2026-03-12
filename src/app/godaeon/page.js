@@ -4,15 +4,27 @@ import { useEffect, useRef } from 'react';
 
 const CARDS = [
   {
+    name: 'VANGUARD',
+    role: 'ASSAULT',
+    mediaType: 'image',
+    mediaSrc: 'https://images.unsplash.com/photo-1614728263952-84ea256f9679?q=80&w=1000&auto=format&fit=crop',
+    backImg: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=1000&auto=format&fit=crop',
+    realName: 'unknown',
+    realRole: 'GAME DESIGN',
+    id: '005',
+    tag: 'OPEN',
+    bio: '"Position open for application."',
+  },
+  {
     name: 'CIPHER',
-    role: 'SYSTEM ARCHITECT',
+    role: 'FOUNDER',
     mediaType: 'image',
     mediaSrc: '/media/valo.jpg',
     backImg: '/media/SAURAV.jpeg',
     realName: 'Saurav Maity',
     realRole: 'Founder',
     id: '001',
-    tag: 'FOUNDER',
+    tag: 'SYSTEM ARCHITECT',
     bio: '"Building, breaking, and innovating. Driven by curiosity."',
     linkedin: 'https://www.linkedin.com/in/saurav-maity-a54a00327/',
   },
@@ -56,18 +68,7 @@ const CARDS = [
     linkedin: '#',
   },
 
-  {
-    name: 'VANGUARD',
-    role: 'ASSAULT',
-    mediaType: 'image',
-    mediaSrc: 'https://images.unsplash.com/photo-1614728263952-84ea256f9679?q=80&w=1000&auto=format&fit=crop',
-    backImg: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=1000&auto=format&fit=crop',
-    realName: 'unknown',
-    realRole: 'GAME DESIGN',
-    id: '005',
-    tag: 'OPEN',
-    bio: '"Position open for application."',
-  },
+  
   {
     name: 'GHOST',
     role: 'STEALTH',
