@@ -3,207 +3,208 @@
 import { useEffect, useRef } from 'react';
 
 const CARDS = [
-    {
-        name: 'CIPHER',
-        role: 'SYSTEM ARCHITECT',
-        mediaType: 'video',
-        mediaSrc: '/media/radar.mp4',
-        backImg: '/media/siddharth.jpeg',
-        realName: 'SORAV',
-        realRole: 'FULL STACK DEV',
-        id: '001',
-        tag: 'FOUNDER',
-        bio: '"Building, breaking, and innovating. Driven by curiosity."',
-        linkedin: '#',
-    },
-    {
-        name: 'RONIN',
-        role: 'UI SPECIALIST',
-        mediaType: 'image',
-        mediaSrc: '/media/hero1.jpeg',
-        backImg: '/media/siddharth.jpeg',
-        realName: 'SIDDHARTH',
-        realRole: 'REACT / GSAP',
-        id: '002',
-        tag: 'LEAD FE',
-        bio: '"Crafting interfaces that blur reality."',
-        linkedin: '#',
-    },
-    {
-        name: 'SPECTRE',
-        role: 'DATA OPS',
-        mediaType: 'image',
-        mediaSrc: '/media/hero2.jpeg',
-        backImg: '/media/swaraj.jpeg',
-        realName: 'SWARAJ',
-        realRole: 'SECURITY OPS',
-        id: '003',
-        tag: 'BACKEND',
-        bio: '"Ensuring scalability and zero downtime."',
-        linkedin: '#',
-    },
-    {
-        name: 'PHANTOM',
-        role: 'RECON',
-        mediaType: 'image',
-        mediaSrc: 'https://images.unsplash.com/photo-1531297461136-82lw8fca9198?q=80&w=1000&auto=format&fit=crop',
-        backImg: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=1000&auto=format&fit=crop',
-        realName: 'UNKNOWN',
-        realRole: 'INTELLIGENCE',
-        id: '004',
-        tag: 'CLASSIFIED',
-        bio: '"Data redacted. Level 5 clearance."',
-        linkedin: '#',
-    },
-    {
-        name: 'VANGUARD',
-        role: 'ASSAULT',
-        mediaType: 'image',
-        mediaSrc: 'https://images.unsplash.com/photo-1614728263952-84ea256f9679?q=80&w=1000&auto=format&fit=crop',
-        backImg: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=1000&auto=format&fit=crop',
-        realName: 'RECRUITING',
-        realRole: 'GAME DESIGN',
-        id: '005',
-        tag: 'OPEN',
-        bio: '"Position open for application."',
-    },
-    {
-        name: 'GHOST',
-        role: 'STEALTH',
-        mediaType: 'image',
-        mediaSrc: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=1000&auto=format&fit=crop',
-        backImg: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=1000&auto=format&fit=crop',
-        realName: 'RECRUITING',
-        realRole: 'AUDIO ENG',
-        id: '006',
-        tag: 'OPEN',
-        bio: '"Seeking audio specialist."',
-    },
-    {
-        name: 'WRAITH',
-        role: 'SUPPORT',
-        mediaType: 'image',
-        mediaSrc: 'https://images.unsplash.com/photo-1626544827763-d516dce335ca?q=80&w=1000&auto=format&fit=crop',
-        backImg: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?q=80&w=1000&auto=format&fit=crop',
-        realName: 'RESERVED',
-        realRole: 'MARKETING',
-        id: '007',
-        tag: 'PENDING',
-        bio: '"Clearance pending."',
-    },
-    {
-        name: 'ONYX',
-        role: 'COMMAND',
-        mediaType: 'image',
-        mediaSrc: 'https://images.unsplash.com/photo-1555680202-c86f0e12f086?q=80&w=1000&auto=format&fit=crop',
-        backImg: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=1000&auto=format&fit=crop',
-        realName: 'UNKNOWN',
-        realRole: 'STRATEGY',
-        id: '008',
-        tag: 'CLASSIFIED',
-        bio: '"Identity protected."',
-    },
+  {
+    name: 'CIPHER',
+    role: 'SYSTEM ARCHITECT',
+    mediaType: 'image',
+    mediaSrc: '/media/valo.jpg',
+    backImg: '/media/SAURAV.jpeg',
+    realName: 'Saurav Maity',
+    realRole: 'Founder',
+    id: '001',
+    tag: 'FOUNDER',
+    bio: '"Building, breaking, and innovating. Driven by curiosity."',
+    linkedin: 'https://www.linkedin.com/in/saurav-maity-a54a00327/',
+  },
+  {
+    name: 'RONIN',
+    role: 'UI SPECIALIST',
+    mediaType: 'image',
+    mediaSrc: '/media/hero1.jpeg',
+    backImg: '/media/siddharth.jpeg',
+    realName: 'SIDDHARTH DWIVEDI',
+    realRole: 'REACT / GSAP',
+    id: '002',
+    tag: 'WEB DEVELOPER',
+    bio: '"Crafting interfaces that blur reality."',
+    linkedin: 'https://www.linkedin.com/in/sidd-zero/',
+  },
+  {
+    name: 'SPECTRE',
+    role: 'DATA OPS',
+    mediaType: 'image',
+    mediaSrc: '/media/hero2.jpeg',
+    backImg: '/media/swaraj.jpeg',
+    realName: 'SWARAJ LAKHE',
+    realRole: 'SPECS-OPS',
+    id: '003',
+    tag: 'FULL STACK DEVELOPER',
+    bio: '"Ensuring scalability and zero downtime."',
+    linkedin: 'https://www.linkedin.com/in/swarajlakhe/',
+  },
+  {
+    name: 'PHANTOM',
+    role: 'RECON',
+    mediaType: 'image',
+    mediaSrc: '/media/cypher.jpeg',
+    backImg: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=1000&auto=format&fit=crop',
+    realName: 'UNKNOWN',
+    realRole: 'INTELLIGENCE',
+    id: '004',
+    tag: 'CLASSIFIED',
+    bio: '"Data redacted. Level 5 clearance."',
+    linkedin: '#',
+  },
+
+  {
+    name: 'VANGUARD',
+    role: 'ASSAULT',
+    mediaType: 'image',
+    mediaSrc: 'https://images.unsplash.com/photo-1614728263952-84ea256f9679?q=80&w=1000&auto=format&fit=crop',
+    backImg: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=1000&auto=format&fit=crop',
+    realName: 'unknown',
+    realRole: 'GAME DESIGN',
+    id: '005',
+    tag: 'OPEN',
+    bio: '"Position open for application."',
+  },
+  {
+    name: 'GHOST',
+    role: 'STEALTH',
+    mediaType: 'image',
+    mediaSrc: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=1000&auto=format&fit=crop',
+    backImg: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=1000&auto=format&fit=crop',
+    realName: 'UNKNOWN',
+    realRole: 'AUDIO ENG',
+    id: '006',
+    tag: 'OPEN',
+    bio: '"Seeking audio specialist."',
+  },
+  {
+    name: 'WRAITH',
+    role: 'SUPPORT',
+    mediaType: 'image',
+    mediaSrc: '/media/sage.jpeg',
+    backImg: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?q=80&w=1000&auto=format&fit=crop',
+    realName: 'UNKNOWN',
+    realRole: 'MARKETING',
+    id: '007',
+    tag: 'PENDING',
+    bio: '"Clearance pending."',
+  },
+  {
+    name: 'ONYX',
+    role: 'COMMAND',
+    mediaType: 'image',
+    mediaSrc: 'https://images.unsplash.com/photo-1555680202-c86f0e12f086?q=80&w=1000&auto=format&fit=crop',
+    backImg: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=1000&auto=format&fit=crop',
+    realName: 'UNKNOWN',
+    realRole: 'STRATEGY',
+    id: '008',
+    tag: 'CLASSIFIED',
+    bio: '"Identity protected."',
+  },
 ];
 
 function CyberCard({ card }) {
-    const innerRef = useRef(null);
-    const cardRef = useRef(null);
-    const isFlippedRef = useRef(false);
+  const innerRef = useRef(null);
+  const cardRef = useRef(null);
+  const isFlippedRef = useRef(false);
 
-    useEffect(() => {
-        const cardEl = cardRef.current;
-        const innerEl = innerRef.current;
-        if (!cardEl || !innerEl) return;
+  useEffect(() => {
+    const cardEl = cardRef.current;
+    const innerEl = innerRef.current;
+    if (!cardEl || !innerEl) return;
 
-        const handleClick = () => {
-            isFlippedRef.current = !isFlippedRef.current;
-            innerEl.classList.toggle('is-flipped');
-            if (isFlippedRef.current) cardEl.style.transform = 'none';
-        };
+    const handleClick = () => {
+      isFlippedRef.current = !isFlippedRef.current;
+      innerEl.classList.toggle('is-flipped');
+      if (isFlippedRef.current) cardEl.style.transform = 'none';
+    };
 
-        const handleMouseMove = (e) => {
-            if (isFlippedRef.current) return;
-            const rect = cardEl.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-            const xPct = (x / rect.width - 0.5) * 2;
-            const yPct = (y / rect.height - 0.5) * 2;
-            const xRotation = yPct * -8;
-            const yRotation = xPct * 8;
-            requestAnimationFrame(() => {
-                if (!isFlippedRef.current) {
-                    cardEl.style.transform = `rotateX(${xRotation}deg) rotateY(${yRotation}deg)`;
-                }
-            });
-        };
+    const handleMouseMove = (e) => {
+      if (isFlippedRef.current) return;
+      const rect = cardEl.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const xPct = (x / rect.width - 0.5) * 2;
+      const yPct = (y / rect.height - 0.5) * 2;
+      const xRotation = yPct * -8;
+      const yRotation = xPct * 8;
+      requestAnimationFrame(() => {
+        if (!isFlippedRef.current) {
+          cardEl.style.transform = `rotateX(${xRotation}deg) rotateY(${yRotation}deg)`;
+        }
+      });
+    };
 
-        const handleMouseLeave = () => {
-            if (!isFlippedRef.current) {
-                cardEl.style.transform = 'rotateX(0deg) rotateY(0deg)';
-            }
-        };
+    const handleMouseLeave = () => {
+      if (!isFlippedRef.current) {
+        cardEl.style.transform = 'rotateX(0deg) rotateY(0deg)';
+      }
+    };
 
-        cardEl.addEventListener('click', handleClick);
-        cardEl.addEventListener('mousemove', handleMouseMove);
-        cardEl.addEventListener('mouseleave', handleMouseLeave);
+    cardEl.addEventListener('click', handleClick);
+    cardEl.addEventListener('mousemove', handleMouseMove);
+    cardEl.addEventListener('mouseleave', handleMouseLeave);
 
-        return () => {
-            cardEl.removeEventListener('click', handleClick);
-            cardEl.removeEventListener('mousemove', handleMouseMove);
-            cardEl.removeEventListener('mouseleave', handleMouseLeave);
-        };
-    }, []);
+    return () => {
+      cardEl.removeEventListener('click', handleClick);
+      cardEl.removeEventListener('mousemove', handleMouseMove);
+      cardEl.removeEventListener('mouseleave', handleMouseLeave);
+    };
+  }, []);
 
-    return (
-        <div className="cyber-card" ref={cardRef}>
-            <div className="card-inner" ref={innerRef}>
-                <div className="card-front">
-                    {card.mediaType === 'video' ? (
-                        <video className="card-media" autoPlay loop muted playsInline>
-                            <source src={card.mediaSrc} type="video/mp4" />
-                        </video>
-                    ) : (
-                        /* eslint-disable-next-line @next/next/no-img-element */
-                        <img className="card-media" src={card.mediaSrc} alt={card.name} />
-                    )}
-                    <div className="front-overlay">
-                        <h2 className="text-3xl font-bold font-teko uppercase leading-none">{card.name}</h2>
-                        <p className="text-xs text-red-500 font-mono tracking-widest">{card.role}</p>
-                    </div>
-                    <div className="tech-frame"></div>
-                </div>
-                <div className="card-back">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={card.backImg} className="real-bg-img" alt={card.realName} />
-                    <div className="back-content">
-                        <div className="card-header">
-                            <span>ID: {card.id}</span>
-                            <span className="tag-highlight">{card.tag}</span>
-                        </div>
-                        <div>
-                            <h3 className="text-3xl font-bold uppercase font-teko">{card.realName}</h3>
-                            <p className="text-xs text-gray-400 uppercase tracking-wider">{card.realRole}</p>
-                            {card.bio && <p className="bio-text">{card.bio}</p>}
-                        </div>
-                    </div>
-                    {card.linkedin && (
-                        <a href={card.linkedin} className="linkedin-btn" onClick={(e) => e.stopPropagation()}>
-                            <i className="fab fa-linkedin"></i>
-                        </a>
-                    )}
-                </div>
-            </div>
+  return (
+    <div className="cyber-card" ref={cardRef}>
+      <div className="card-inner" ref={innerRef}>
+        <div className="card-front">
+          {card.mediaType === 'video' ? (
+            <video className="card-media" autoPlay loop muted playsInline>
+              <source src={card.mediaSrc} type="video/mp4" />
+            </video>
+          ) : (
+            /* eslint-disable-next-line @next/next/no-img-element */
+            <img className="card-media" src={card.mediaSrc} alt={card.name} />
+          )}
+          <div className="front-overlay">
+            <h2 className="text-3xl font-bold font-teko uppercase leading-none">{card.name}</h2>
+            <p className="text-xs text-red-500 font-mono tracking-widest">{card.role}</p>
+          </div>
+          <div className="tech-frame"></div>
         </div>
-    );
+        <div className="card-back">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={card.backImg} className="real-bg-img" alt={card.realName} />
+          <div className="back-content">
+            <div className="card-header">
+              <span>ID: {card.id}</span>
+              <span className="tag-highlight">{card.tag}</span>
+            </div>
+            <div>
+              <h3 className="text-3xl font-bold uppercase font-teko">{card.realName}</h3>
+              <p className="text-xs text-gray-400 uppercase tracking-wider">{card.realRole}</p>
+              {card.bio && <p className="bio-text">{card.bio}</p>}
+            </div>
+          </div>
+          {card.linkedin && (
+            <a href={card.linkedin} className="linkedin-btn" onClick={(e) => e.stopPropagation()}>
+              <i className="fab fa-linkedin"></i>
+            </a>
+          )}
+        </div>
+      </div>
+    </div>
+  );
 }
 
 export default function GodaeonPage() {
-    // Duplicate cards for infinite scroll
-    const allCards = [...CARDS, ...CARDS];
+  // Duplicate cards for infinite scroll
+  const allCards = [...CARDS, ...CARDS];
 
-    return (
-        <>
-            <style jsx global>{`
+  return (
+    <>
+      <style jsx global>{`
         .carousel-view {
           width: 100%;
           height: 80vh;
@@ -363,21 +364,21 @@ export default function GodaeonPage() {
         }
       `}</style>
 
-            <div className="cyber-grid-bg"></div>
+      <div className="cyber-grid-bg"></div>
 
-            <div className="container mx-auto px-6 pt-16 text-center">
-                <h1 className="text-5xl font-bold mb-2 tracking-tighter">
-                    THE <span className="text-red-600">SQUAD</span>
-                </h1>
-            </div>
+      <div className="container mx-auto px-6 pt-16 text-center">
+        <h1 className="text-5xl font-bold mb-2 tracking-tighter">
+          THE <span className="text-red-600">SQUAD</span>
+        </h1>
+      </div>
 
-            <div className="carousel-view">
-                <div className="carousel-track">
-                    {allCards.map((card, i) => (
-                        <CyberCard key={`card-${i}`} card={card} />
-                    ))}
-                </div>
-            </div>
-        </>
-    );
+      <div className="carousel-view">
+        <div className="carousel-track">
+          {allCards.map((card, i) => (
+            <CyberCard key={`card-${i}`} card={card} />
+          ))}
+        </div>
+      </div>
+    </>
+  );
 }

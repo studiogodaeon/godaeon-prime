@@ -61,7 +61,7 @@ export default function ContactPage() {
                             <i className="fas fa-envelope text-2xl text-red-600"></i>
                             <div>
                                 <h3 className="font-bold text-sm text-gray-400 uppercase">Email</h3>
-                                <p className="text-lg">official studio contact</p>
+                                <p className="text-lg">godaeonstudio@gmail.com</p>
                             </div>
                         </div>
 
@@ -144,8 +144,8 @@ export default function ContactPage() {
                         {/* Feedback message */}
                         {feedback && (
                             <div className={`p-4 rounded text-sm font-medium ${status === 'success'
-                                    ? 'bg-green-900/40 text-green-400 border border-green-700'
-                                    : 'bg-red-900/40 text-red-400 border border-red-700'
+                                ? 'bg-green-900/40 text-green-400 border border-green-700'
+                                : 'bg-red-900/40 text-red-400 border border-red-700'
                                 }`}>
                                 {feedback}
                             </div>
